@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+PROJDIR=$(cd "$(dirname "$0")" && pwd -P)
+cd "$PROJDIR"
+
+die()       { local ec="$1"; shift; echo 1>&2 "$@"; exit "$ec"; }
+test_dep()  { "$@" >/dev/null 2>&1; }
+
+deps_debian() {
+    local deps=()
+
+    #   general
+    test_dep cc --version           || deps+=(build-essential)
+    test_dep make --version         || deps+=(make)
+
+    #   bash 3
+    test_dep yacc --version         || deps+=(bison)
+
+    [[ -n ${deps[@]} ]]             && sudo apt-get install "${deps[@]}"
+    true
+}
+
+BASH3_GITIGNORE='
+/.gitignore
+
+/.build
+/.made
+/Makefile
+/bash
+/bashbug
+/bashversion
+/builtins/Makefile
+/builtins/builtext.h
+/builtins/builtins.c
+/builtins/mkbuiltins
+/builtins/pipesize.h
+/builtins/psize.aux
+/config.h
+/config.log
+/config.status
+/doc/Makefile
+/examples/loadables/Makefile
+/examples/loadables/perl/Makefile
+/lib/glob/Makefile
+/lib/intl/Makefile
+/lib/malloc/Makefile
+/lib/readline/Makefile
+/lib/sh/Makefile
+/lib/termcap/Makefile
+/lib/tilde/Makefile
+/lsignames.h
+/mksignames
+/mksyntax
+/pathnames.h
+/po/Makefile
+/po/Makefile.in
+/po/POTFILES
+/signames.h
+/stamp-h
+/support/Makefile
+/syntax.c
+/version.h
+
+*.o
+*.a
+'
+
+build_bash3() {
+    [[ -e bash3/parse.y ]] || {
+        git submodule update --init bash3
+        touch bash3/parse.y      # shipped y.tab.* are buggy; regenerate
+        echo "$BASH3_GITIGNORE" > bash3/.gitignore
+    }
+    (
+        cd bash3
+        [[ -e config.h ]] || ./configure
+        make -j16
+        ./bash --version
+        [[ $(./bash --version) == *3.2.48* ]] || die 2 "Bad bash3 version?"
+    )
+    rm -f bin/bash3 && ln -s ../bash3/bash bin/bash3
+}
+
+deps_debian     # XXX should support other systems?
+mkdir -p bin/
+build_bash3

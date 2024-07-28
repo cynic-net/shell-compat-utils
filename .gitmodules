@@ -1,0 +1,4 @@
+[submodule "bash3"]
+	path = bash3
+	url = https://github.com/bminor/bash.git
+	branch = f3b6bd19457e260b65d11f2712ec3da56cef463f
