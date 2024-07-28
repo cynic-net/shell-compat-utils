@@ -14,6 +14,11 @@ name that reflects its version.
   MacOS, which never upgraded to Bash 4.x but instead switched the default
   user shell to Zsh.
 
+- XXX `sed` notes
+  According to the [Apple OSS releases][aossrel] page, MacOS 10.12 (2016,
+  "Sierra") uses the `text_cmds-97` version of
+  [apple-oss-distributions/text_cmds][text_cmds].
+
 Zsh is not included in this repo because most systems already have a
 current version of Zsh. (On Debian, install this with `apt install zsh`.)
 
@@ -47,4 +52,6 @@ in mind if you're forking of your own private version of Bash 3.
 
 
 <!-------------------------------------------------------------------->
+[aossrel]: https://opensource.apple.com/releases/
 [bash-un]: https://github.com/bminor/bash.git
+[text_cmds]: https://github.com/apple-oss-distributions/text_cmds/tree/text_cmds-97
