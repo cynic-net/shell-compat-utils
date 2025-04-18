@@ -8,11 +8,16 @@ name that reflects its version.
 
 ### Programs
 
-- `bash3`: Bash version 3.2.48, from the [unofficial mirror Git
+* `bash3`: Bash version 3.2.48, from the [unofficial mirror Git
   repo][bash-un] commit `f3b6bd19` ("Imported from ../bash-3.2.48.tar.gz.")
   This is probably similar to the latest version of Bash available on
   MacOS, which never upgraded to Bash 4.x but instead switched the default
   user shell to Zsh.
+
+* `apple/text_cmds/` supplies various BSD text-manipulation programs.
+  According to the [Apple OSS releases][aossrel] page, MacOS 10.12 (2016,
+  "Sierra") uses the version tagged `text_cmds-97`, which is what we use
+  here.
 
 Zsh is not included in this repo because most systems already have a
 current version of Zsh. (On Debian, install this with `apt install zsh`.)
@@ -33,6 +38,7 @@ repo. You have several options for using them:
    `/usr/local/bin/` (or similar), and ensure that the permissions are set
    so that the files are world-readable and -executable.
 
+
 Notes
 -----
 
@@ -47,4 +53,6 @@ in mind if you're forking of your own private version of Bash 3.
 
 
 <!-------------------------------------------------------------------->
+[aossrel]: https://opensource.apple.com/releases/
 [bash-un]: https://github.com/bminor/bash.git
+[text_cmds]: https://github.com/apple-oss-distributions/text_cmds
