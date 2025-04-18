@@ -33,6 +33,17 @@ repo. You have several options for using them:
    `/usr/local/bin/` (or similar), and ensure that the permissions are set
    so that the files are world-readable and -executable.
 
+Notes
+-----
+
+### Bash 3
+
+The committed `y.tab.*` are buggy, so we `touch parse.y` to force them
+to be regnerated. That causes `git status` constantly to indicate that
+the files (or subodule) are changed, which is annoying so we mark them
+with `git update-index --assume-unchanged` to suppress this. Keep this
+in mind if you're forking of your own private version of Bash 3.
+
 
 
 <!-------------------------------------------------------------------->

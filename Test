@@ -66,6 +66,11 @@ BASH3_GITIGNORE='
 *.a
 '
 
+#   These committed files are changed because we force a parser rebuild
+#   (the y.tab.* committed in the repo are buggy). To avoid annoying
+#   messages from `git status` we mark them to be assumed unchanged.
+BASH3_ASSUME_UNCHANGED=( parser-built y.tab.c y.tab.h)
+
 build_bash3() {
     [[ -e bash3/parse.y ]] || {
         git submodule update --init bash3
@@ -76,6 +81,7 @@ build_bash3() {
         cd bash3
         [[ -e config.h ]] || ./configure
         make -j16
+        git update-index --assume-unchanged "${BASH3_ASSUME_UNCHANGED[@]}"
         ./bash --version
         [[ $(./bash --version) == *3.2.48* ]] || die 2 "Bad bash3 version?"
     )
