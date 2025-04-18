@@ -20,6 +20,10 @@ deps_debian() {
     test_dep autoconf --version     || deps+=(autoconf)
     test_dep yacc --version         || deps+=(bison)
 
+    #   MacOS sed
+    test_dep pkgconf --version      || deps+=(pkgconf libbsd-dev)
+    test_dep pkgconf libbsd-overlay || deps+=(libbsd-dev)
+
     [[ ${#deps[@]} -eq 0 ]] && return 0     # no installs necessary
 
     echo '===== Installing missing system build dependnecies:'
@@ -60,6 +64,16 @@ build_bash3() {
     [[ $(bin/bash3 --version) == *3.2.48* ]] || die 2 "Bad bash3 version?"
 }
 
+build_mac_sed() {
+    local sed=apple/text_cmds/sed
+    cp build-files/sed.gitignore $sed/.gitignore
+    cp build-files/sed/*         $sed
+    ( command cd $sed && make -j4 )
+    cp $sed/sed bin/macsed
+
+    echo -e "123\nabc" | bin/macsed -n -e 's/b/B/p' | diff <(echo aBc) -
+}
+
 ####################################################################
 #   Main
 
@@ -69,3 +83,4 @@ cd "$PROJDIR"
 submodule_setup
 rm -rf bin/ && mkdir bin/
 build_bash3
+build_mac_sed

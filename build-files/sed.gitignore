@@ -1,0 +1,6 @@
+/.gitignore
+/Makefile
+/apple_env.h
+/*.o
+/sed
+
