@@ -17,6 +17,22 @@ name that reflects its version.
 Zsh is not included in this repo because most systems already have a
 current version of Zsh. (On Debian, install this with `apt install zsh`.)
 
+### Installation
+
+Building with `./Test` will install the programs into `bin/` in this
+repo. You have several options for using them:
+
+1. In the project using these, add this proejct's `…/bin` directory to the
+   path used by your test code.
+
+2. For "global" access for your user, in `~/.local/bin/`, symlink the
+   program names to the programs in this project's `bin/` directory, or
+   simply copy `bin/*` to `~/.local/bin/`.
+
+3. For "global" access on the whole system, copy `bin/*` to
+   `/usr/local/bin/` (or similar), and ensure that the permissions are set
+   so that the files are world-readable and -executable.
+
 
 
 <!-------------------------------------------------------------------->
