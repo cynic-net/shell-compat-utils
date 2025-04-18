@@ -33,12 +33,15 @@ deps_debian() {
 
 submodule_setup() {
     local module_paths=$(sed -n -e 's/path = //p' .gitmodules)
-    local path init=false
+    local path
     for path in $module_paths; do
-        [[ -d $path/. ]] || init=true
+        [[ $(git submodule status $path) = -* ]] && {
+            echo "Submodule init: $path"
+            rm -rf $path
+            git submodule update --init $path
+        }
     done
-    $init || return 0
-    git submodule update --init
+    return 0
 }
 
 build_bash3() {
