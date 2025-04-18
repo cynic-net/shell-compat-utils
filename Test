@@ -24,16 +24,26 @@ deps_debian() {
     sudo apt-get install "${deps[@]}"
 }
 
+submodule_setup() {
+    local module_paths=$(sed -n -e 's/path = //p' .gitmodules)
+    local path init=false
+    for path in $module_paths; do
+        [[ -d $path/. ]] || init=true
+    done
+    $init || return 0
+    git submodule update --init
+}
+
 build_bash3() {
     #   These committed files are changed because we force a parser rebuild
     #   (the y.tab.* committed in the repo are buggy). To avoid annoying
     #   messages from `git status` we mark them to be assumed unchanged.
     BASH3_ASSUME_UNCHANGED=( parser-built y.tab.c y.tab.h)
 
-    [[ -e bash3/parse.y ]] || {
-        git submodule update --init bash3
-        touch bash3/parse.y      # shipped y.tab.* are buggy; regenerate
-    }
+    #   The shipped y.tab.* are buggy; force regeneration. But only do
+    #   so on "new" builds where configure hasn't been run.
+    [[ -e bash3/config.h ]] || touch bash3/parse.y
+
     cp build-files/bash3.gitignore bash3/.gitignore
     (
         cd bash3
@@ -53,5 +63,6 @@ build_bash3() {
 deps_debian     # XXX should support other systems?
 
 cd "$PROJDIR"
+submodule_setup
 rm -rf bin/ && mkdir bin/
 build_bash3
