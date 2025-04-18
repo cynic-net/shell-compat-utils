@@ -17,7 +17,8 @@ name that reflects its version.
 * `apple/text_cmds/` supplies various BSD text-manipulation programs.
   According to the [Apple OSS releases][aossrel] page, MacOS 10.12 (2016,
   "Sierra") uses the version tagged `text_cmds-97`, which is what we use
-  here.
+  here. The programs we build from this are:
+  * `sed`: The MacOS version of sed. Installed in `bin/macsed`.
 
 Zsh is not included in this repo because most systems already have a
 current version of Zsh. (On Debian, install this with `apt install zsh`.)
