@@ -56,6 +56,7 @@ build_bash3() {
         git update-index --assume-unchanged "${BASH3_ASSUME_UNCHANGED[@]}"
     )
     cp bash3/bash bin/bash3
+    cp bash3/bash macbin/bash
 
     bin/bash3 --version
     [[ $(bin/bash3 --version) == *3.2.48* ]] || die 2 "Bad bash3 version?"
@@ -67,6 +68,7 @@ build_mac_sed() {
     cp build-files/sed/*         $sed
     ( command cd $sed && make -j4 )
     cp $sed/sed bin/macsed
+    cp $sed/sed macbin/sed
 
     echo -e "123\nabc" | bin/macsed -n -e 's/b/B/p' | diff <(echo aBc) -
 }
@@ -78,6 +80,6 @@ deps_debian     # XXX should support other systems?
 
 cd "$PROJDIR"
 submodule_setup
-rm -rf bin/ && mkdir bin/
+rm -rf bin/ macbin/ && mkdir bin/ macbin/
 build_bash3
 build_mac_sed

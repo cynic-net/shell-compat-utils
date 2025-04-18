@@ -25,10 +25,20 @@ current version of Zsh. (On Debian, install this with `apt install zsh`.)
 
 ### Installation
 
-Building with `./Test` will install the programs into `bin/` in this
-repo. You have several options for using them:
+Building with `./Test` will install the programs into the following directories in this repo:
+- `bin/`: Programs with names distinguished from the standard system names,
+   e.g. `bash3` and `macsed`.
+- `macbin/`: Programs with the standard system names on the given system,
+   e.g. `bash` and `sed`.
 
-1. In the project using these, add this proejct's `…/bin` directory to the
+Which bin/ directory you want to use depends on how you're doing your
+testing. `bin/` is more convenient for checking a command invocation,
+and `macbin/` is more convenient for checking a script that invokes
+other commands.
+
+You have several options for using them:
+
+1. In the project using these, add appropriate `…/*bin` directory to the
    path used by your test code.
 
 2. For "global" access for your user, in `~/.local/bin/`, symlink the
@@ -38,6 +48,9 @@ repo. You have several options for using them:
 3. For "global" access on the whole system, copy `bin/*` to
    `/usr/local/bin/` (or similar), and ensure that the permissions are set
    so that the files are world-readable and -executable.
+
+In the latter two cases you do _not_ want to copy or symlink the contents
+of `macbin/` as that will probably break normal scripts on your system.
 
 
 Notes
