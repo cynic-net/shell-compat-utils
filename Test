@@ -33,15 +33,9 @@ deps_debian() {
 
 submodule_setup() {
     local module_paths=$(sed -n -e 's/path = //p' .gitmodules)
-    local path
-    for path in $module_paths; do
-        [[ $(git submodule status $path) = -* ]] && {
-            echo "Submodule init: $path"
-            rm -rf $path
-            git submodule update --init $path
-        }
-    done
-    return 0
+    local uninited=$(git submodule status | grep '^-')
+    [[ -z $uninited ]] && return 0
+    git submodule update --init
 }
 
 build_bash3() {
