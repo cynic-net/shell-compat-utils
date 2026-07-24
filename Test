@@ -51,7 +51,7 @@ build_bash3() {
     cp build-files/bash3.gitignore bash3/.gitignore
     (
         cd bash3
-        [[ -e config.h ]] || ./configure
+        [[ -e config.h ]] || ./configure CC='gcc -fpermissive'
         make -j16
         git update-index --assume-unchanged "${BASH3_ASSUME_UNCHANGED[@]}"
     )
